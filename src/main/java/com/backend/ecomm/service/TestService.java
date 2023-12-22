@@ -14,10 +14,12 @@ public class TestService {
     public Test saveTest(Test test) {
         return testRepository.save(test);
     }
-    public Test getTestById(int id){
+
+    public Test getTestById(int id) {
         return testRepository.findById(id);
     }
-    public Test deleteTestById(int id){
+
+    public Test deleteTestById(int id) {
         Test test = getTestById(id);
         testRepository.deleteById(id);
         return test;

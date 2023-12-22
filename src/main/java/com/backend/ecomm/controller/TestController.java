@@ -31,30 +31,34 @@ public class TestController {
             this.success = success;
         }
     }
+
     @Autowired
     private TestService testService;
+
     @GetMapping("/get-test")
-    public ResponseEntity<CustomResponse> test(){
+    public ResponseEntity<CustomResponse> test() {
         CustomResponse response = new CustomResponse();
         response.setSuccess(false);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PostMapping("/test-save")
-    public ResponseEntity<CustomResponse> saveTest(@RequestBody Test givenTest){
+    public ResponseEntity<CustomResponse> saveTest(@RequestBody Test givenTest) {
 
         String text = givenTest.getTest();
         int id = givenTest.getId();
-        Test test = testService.saveTest(new Test(id,text));
+        Test test = testService.saveTest(new Test(id, text));
 
-        System.out.println("test " +test);
+        System.out.println("test " + test);
         CustomResponse customResponse = new CustomResponse();
         customResponse.setSuccess(true);
         customResponse.setData(test);
 
         return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
+
     @GetMapping("/test-get/{id}")
-    public ResponseEntity<CustomResponse> getTest(@PathVariable int id){
+    public ResponseEntity<CustomResponse> getTest(@PathVariable int id) {
 
         Test test = testService.getTestById(id);
 
@@ -63,8 +67,9 @@ public class TestController {
         customResponse.setSuccess(true);
         return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
+
     @DeleteMapping("/test-delete/{id}")
-    public ResponseEntity<CustomResponse> deleteTest(@PathVariable int id){
+    public ResponseEntity<CustomResponse> deleteTest(@PathVariable int id) {
 
         Test test = testService.deleteTestById(id);
 
