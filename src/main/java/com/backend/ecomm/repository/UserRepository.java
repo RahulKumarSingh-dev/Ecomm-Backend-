@@ -1,17 +1,12 @@
 package com.backend.ecomm.repository;
 
-
 import com.backend.ecomm.entity.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepository {
-    public User findUserByEmail(String email) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        User user = new User(email, encoder.encode("123456"));
-        user.setFirstName("FirstName");
-        user.setLastName("LastName");
-        return user;
-    }
+public interface UserRepository extends JpaRepository<User, Integer> {
+    User findById(int id);
+    User findByEmail(String email);
+
 }

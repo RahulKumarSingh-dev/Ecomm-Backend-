@@ -1,4 +1,4 @@
-package com.backend.ecomm.entity.response;
+package com.backend.ecomm.dto.response;
 
 import org.springframework.http.HttpStatus;
 

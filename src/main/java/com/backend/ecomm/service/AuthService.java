@@ -13,17 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class AuthService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(email);
+        User user = userRepository.findByEmail(email);
         List<String> roles = new ArrayList<>();
         roles.add("USER");
         UserDetails userDetails =

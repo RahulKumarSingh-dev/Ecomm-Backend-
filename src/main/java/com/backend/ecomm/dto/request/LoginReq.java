@@ -1,4 +1,4 @@
-package com.backend.ecomm.entity.request;
+package com.backend.ecomm.dto.request;
 
 public class LoginReq {
     private String email;

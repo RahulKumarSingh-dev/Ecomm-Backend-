@@ -1,45 +1,58 @@
 package com.backend.ecomm.entity;
 
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Date;
+import java.util.Set;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
+
+    @Id
+    @GeneratedValue
+    private int id;
+    private String name;
+
     private String email;
+
     private String password;
-    private String firstName;
-    private String lastName;
 
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+    private String forgotPasswordToken;
 
-    public String getEmail() {
-        return email;
-    }
+    private Date forgotPasswordExpiry;
+    @Column(nullable = false, updatable = false)
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
-    public String getPassword() {
-        return password;
-    }
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt=new Date();
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")}, inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
+    private Set<Role> role;
 
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+//   TODO: private Photo photo;
 
-    public String getLastName() {
-        return lastName;
-    }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 }
+
+/*
+
+name
+email
+password
+role
+photo 
+{ id, secure url }
+resetPasswordToken
+resetPasswordExpiry
+createdAt
+ */

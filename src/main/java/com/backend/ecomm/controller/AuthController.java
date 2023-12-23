@@ -1,11 +1,11 @@
 package com.backend.ecomm.controller;
 
 
-import com.backend.ecomm.auth.JwtUtil;
+import com.backend.ecomm.util.JwtUtil;
 import com.backend.ecomm.entity.User;
-import com.backend.ecomm.entity.request.LoginReq;
-import com.backend.ecomm.entity.response.ErrorRes;
-import com.backend.ecomm.entity.response.LoginRes;
+import com.backend.ecomm.dto.request.LoginReq;
+import com.backend.ecomm.dto.response.ErrorRes;
+import com.backend.ecomm.dto.response.LoginRes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -37,11 +37,12 @@ public class AuthController {
     public ResponseEntity login(@RequestBody LoginReq loginReq) {
 
         try {
-            System.out.println("given password ---------" + loginReq.getPassword());
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
             String email = authentication.getName();
-            User user = new User(email, "");
+            User user = new User();
+            user.setEmail(email);
+            user.setPassword("");
             String token = jwtUtil.createToken(user);
             LoginRes loginRes = new LoginRes(email, token);
 

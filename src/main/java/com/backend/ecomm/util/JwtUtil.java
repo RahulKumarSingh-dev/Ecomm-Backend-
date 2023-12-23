@@ -1,4 +1,4 @@
-package com.backend.ecomm.auth;
+package com.backend.ecomm.util;
 
 import com.backend.ecomm.entity.User;
 import io.jsonwebtoken.*;
@@ -28,8 +28,8 @@ public class JwtUtil {
 
     public String createToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
-        claims.put("firstName", user.getFirstName());
-        claims.put("lastName", user.getLastName());
+//        claims.put("firstName", user.getFirstName());
+//        claims.put("lastName", user.getLastName());
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()

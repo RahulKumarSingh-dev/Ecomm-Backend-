@@ -2,7 +2,7 @@ package com.backend.ecomm.auth;
 
 
 
-import com.backend.ecomm.service.CustomUserDetailsService;
+import com.backend.ecomm.service.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,10 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailsService;
+    private final AuthService userDetailsService;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthorizationFilter jwtAuthorizationFilter) {
+    public SecurityConfig(AuthService customUserDetailsService, JwtAuthorizationFilter jwtAuthorizationFilter) {
         this.userDetailsService = customUserDetailsService;
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
 
@@ -41,7 +41,7 @@ public class SecurityConfig {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/auth/**","/api/v1/create-role").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
