@@ -12,20 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1")
 public class UserController {
 
-    @Autowired
-    UserService userService;
-    @PostMapping("/register")
-    public AuthResponse register(@RequestBody User user){
-        return userService.registerUser(user);
-    }
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginReq loginReq){
-        return userService.loginUser(loginReq);
-    }
 
 
 

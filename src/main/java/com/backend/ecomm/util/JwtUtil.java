@@ -2,6 +2,7 @@ package com.backend.ecomm.util;
 
 import com.backend.ecomm.entity.User;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -59,11 +60,28 @@ public class JwtUtil {
         }
     }
 
+    // resolve token using bearer token
+//    public String resolveToken(HttpServletRequest request) {
+//
+//        String bearerToken = request.getHeader(TOKEN_HEADER);
+//        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
+//            return bearerToken.substring(TOKEN_PREFIX.length());
+//        }
+//        return null;
+//    }
+
+    // resolve token using cookies
     public String resolveToken(HttpServletRequest request) {
 
-        String bearerToken = request.getHeader(TOKEN_HEADER);
-        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(TOKEN_PREFIX.length());
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("jwt")) {
+                    String token = cookie.getValue();
+                    return token;
+
+                }
+            }
         }
         return null;
     }
