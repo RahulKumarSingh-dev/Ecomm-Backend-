@@ -4,6 +4,7 @@ import com.backend.ecomm.entity.User;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,9 @@ import java.util.concurrent.TimeUnit;
 public class JwtUtil {
 
 
-    private final String secret_key = "mysecretkey";
-    private long accessTokenValidity = 60 * 60 * 1000;
+
+    private final String secret_key="mysecretkey";
+
 
     private final JwtParser jwtParser;
 
@@ -27,20 +29,22 @@ public class JwtUtil {
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
 
-    public String createToken(User user) {
+    public String createToken(User user,int validityInMinutes) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
 //        claims.put("firstName", user.getFirstName());
 //        claims.put("lastName", user.getLastName());
         Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
-        return Jwts.builder()
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis((long) validityInMinutes *60*1000));
+        String token = Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(tokenValidity)
                 .signWith(SignatureAlgorithm.HS256, secret_key)
                 .compact();
+
+        return token;
     }
 
-    private Claims parseJwtClaims(String token) {
+    public Claims parseJwtClaims(String token) {
         return jwtParser.parseClaimsJws(token).getBody();
     }
 
@@ -76,9 +80,8 @@ public class JwtUtil {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("jwt")) {
-                    String token = cookie.getValue();
-                    return token;
+                if (cookie.getName().equals("accessToken")) {
+                    return cookie.getValue();
 
                 }
             }
